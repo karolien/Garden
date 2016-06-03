@@ -10,9 +10,10 @@ public class GardenPanel extends JComponent implements Runnable {
 	private ArrayList<Flower> plants = new ArrayList<Flower>();
 	private int delay = 30;
 	private int currentPlantType = 0;
+	private JTextArea outputArea;
 
-	public GardenPanel() {
-
+	public GardenPanel(JTextArea output) {
+		this.outputArea = output;
 		start();
 
 		addMouseListener( new MouseAdapter() {
@@ -22,9 +23,10 @@ public class GardenPanel extends JComponent implements Runnable {
 					for(Flower f: plants){
 						if ( f.contains( e.getPoint()) ) { 
 							found = true;
-							if (currentButton == 1){
+							if (currentButton == 1 && f.alive){
 								f.water();
-								System.out.println("You watered your " + f.getType());
+								outputArea.append("You watered your " + f.getType() + "\n");
+								//System.out.println("You watered your " + f.getType());
 							}
 						}
 					}
@@ -42,16 +44,18 @@ public class GardenPanel extends JComponent implements Runnable {
 		Thread t;
 		switch(currentPlantType){
 			case 0:
-				Lily f = new Lily(x, y);
+				Lily f = new Lily(x, y, outputArea);
 				t = new Thread(f);
 				t.start();
 				plants.add(f);
+				outputArea.append("You planted a lily seedling!\n");
 				break;
 			case 1:
-				Rose r = new Rose(x, y);
+				Rose r = new Rose(x, y, outputArea);
 				t = new Thread(r);
 				t.start();
 				plants.add(r);
+				outputArea.append("You planted a rose seedling!\n");
 				break;
 		}
 		
