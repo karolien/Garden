@@ -26,6 +26,17 @@ public class GUI extends JFrame {
         garden.setPreferredSize(new Dimension(600, 600));
         cp.add(garden, BorderLayout.NORTH);
 
+        String[] plantList = {"Lily", "Rose"};
+		JComboBox plantsComboBox = new JComboBox(plantList);
+		plantsComboBox.setToolTipText("Select plant type");
+		plantsComboBox.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JComboBox cb = (JComboBox)e.getSource();
+				//set the Current shape type based on the selection: 0 for Circle, 1 for Rectangle etc
+				garden.setCurrentPlantType(cb.getSelectedIndex());
+			}
+		});
+        bottomPanel.add(plantsComboBox);
         //~~~~~~~~~~~~~~~~~~~~~~ADD PLANT BUTTON~~~~~~~~~~~~~~
         AddPlantButton.addActionListener(new ActionListener() {
             @Override
