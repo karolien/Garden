@@ -9,6 +9,7 @@ public class GardenPanel extends JComponent implements Runnable {
 	private int currentButton = 0;
 	private ArrayList<Flower> plants = new ArrayList<Flower>();
 	private int delay = 30;
+	private int currentPlantType = 0;
 
 	public GardenPanel() {
 
@@ -38,10 +39,22 @@ public class GardenPanel extends JComponent implements Runnable {
 	}
 
 	protected void addNewPlant(int x, int y) {
-		Flower f = new Flower("Lily", x, y);
-		Thread t = new Thread(f);
-		t.start();
-		plants.add(f);
+		Thread t;
+		switch(currentPlantType){
+			case 0:
+				Lily f = new Lily(x, y);
+				t = new Thread(f);
+				t.start();
+				plants.add(f);
+				break;
+			case 1:
+				Rose r = new Rose(x, y);
+				t = new Thread(r);
+				t.start();
+				plants.add(r);
+				break;
+		}
+		
 	}
 
 	public void update(Graphics g){
@@ -50,7 +63,9 @@ public class GardenPanel extends JComponent implements Runnable {
 
 	public void paintComponent(Graphics g) {
 		for(Flower f: plants){
-			f.draw(g);
+			if(f.isAlive()){
+				f.draw(g);
+			}
 		}
 	}
 
@@ -77,5 +92,9 @@ public class GardenPanel extends JComponent implements Runnable {
 		try {
 			Thread.sleep((long)milliseconds);
 		} catch(InterruptedException ie) {}
+	}
+
+	public void setCurrentPlantType(int selectedIndex) {
+		currentPlantType = selectedIndex;		
 	}
 }
