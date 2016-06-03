@@ -4,47 +4,53 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+
 public class GUI extends JFrame {
     
     GardenPanel garden;
     Thread thread;
     Container cp = getContentPane();
     int currentButton;  //0 = add plant, 1 = water plant
-    
+    String[] plantList = {"Lily", "Rose"};
 	public GUI() {
         setTitle("My Garden");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        BoxLayout boxlayout = new BoxLayout(cp, BoxLayout.Y_AXIS);
+        cp.setLayout(boxlayout);
         
-        final JButton AddPlantButton = new JButton("Add New Plant");
+        final JButton AddPlantButton = new JButton("Planter Tool");
+        AddPlantButton.setBackground(Color.green);
         AddPlantButton.setToolTipText("Click to add a new plant to your garden");
-        final JButton waterButton = new JButton("Water Plant");
+        final JButton waterButton = new JButton("Watering Can");
         waterButton.setToolTipText("Click to use watering can");
 
-        JPanel bottomPanel = new JPanel();
-
-        garden = new GardenPanel();
-        garden.setPreferredSize(new Dimension(600, 600));
-        cp.add(garden, BorderLayout.NORTH);
-
-        String[] plantList = {"Lily", "Rose"};
+        JPanel buttonPanel = new JPanel();
+        JTextArea outputArea = new JTextArea();
+        
+        garden = new GardenPanel(outputArea);
+        garden.setPreferredSize(new Dimension(600, 400));
+        cp.add(garden);
+        
+        
 		JComboBox plantsComboBox = new JComboBox(plantList);
 		plantsComboBox.setToolTipText("Select plant type");
 		plantsComboBox.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JComboBox cb = (JComboBox)e.getSource();
-				//set the Current shape type based on the selection: 0 for Circle, 1 for Rectangle etc
 				garden.setCurrentPlantType(cb.getSelectedIndex());
 			}
 		});
-        bottomPanel.add(plantsComboBox);
+        buttonPanel.add(plantsComboBox);
         //~~~~~~~~~~~~~~~~~~~~~~ADD PLANT BUTTON~~~~~~~~~~~~~~
         AddPlantButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
             	garden.updateButton(0);
+            	AddPlantButton.setBackground(Color.green);;
+            	waterButton.setBackground(null);;
             }
         });
-        bottomPanel.add(AddPlantButton);
+        buttonPanel.add(AddPlantButton);
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         
         
@@ -53,13 +59,26 @@ public class GUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
             	garden.updateButton(1);
+            	waterButton.setBackground(Color.green);
+            	AddPlantButton.setBackground(null);;
             }
         });
-        bottomPanel.add(waterButton);
+        buttonPanel.add(waterButton);
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        cp.add(bottomPanel, BorderLayout.SOUTH);
-
+        cp.add(buttonPanel);
+        
+        JPanel bottomPanel = new JPanel();
+        JScrollPane scroll = new JScrollPane(outputArea);
+        scroll.setPreferredSize(new Dimension(600,200));
+        scroll.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {  
+            public void adjustmentValueChanged(AdjustmentEvent e) {  
+                e.getAdjustable().setValue(e.getAdjustable().getMaximum());  
+            }
+        });
+        bottomPanel.add(scroll);
+        setResizable(false);
+        cp.add(bottomPanel);
         pack();
         
         thread = new Thread(garden);
