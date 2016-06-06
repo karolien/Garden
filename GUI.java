@@ -11,7 +11,7 @@ public class GUI extends JFrame {
     Thread thread;
     Container cp = getContentPane();
     int currentButton;  //0 = add plant, 1 = water plant
-    String[] plantList = {"Lily", "Rose"};
+    String[] plantList = {"Lily", "Rose", "Cactus"};
 	public GUI() {
         setTitle("My Garden");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
