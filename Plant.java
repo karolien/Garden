@@ -2,7 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 
-public abstract class Flower implements Runnable{
+public abstract class Plant implements Runnable{
 	protected String type;
 	protected int waterLevel;
 	protected int maturity;
@@ -10,7 +10,7 @@ public abstract class Flower implements Runnable{
 	protected Point p;
 	protected boolean alive = true;
 
-	public Flower(int x, int y){
+	public Plant(int x, int y){
 		waterLevel = 50;
 		maturity = 0;
 		careLevel = 0;
