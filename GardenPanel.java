@@ -7,7 +7,7 @@ import java.awt.event.*;
 public class GardenPanel extends JComponent implements Runnable {
 	private Thread animationThread = null;	// the thread for animation
 	private int currentButton = 0;
-	private ArrayList<Flower> plants = new ArrayList<Flower>();
+	private ArrayList<Plant> plants = new ArrayList<Plant>();
 	private int delay = 30;
 	private int currentPlantType = 0;
 	private JTextArea outputArea;
@@ -20,13 +20,12 @@ public class GardenPanel extends JComponent implements Runnable {
 			public void mouseClicked( MouseEvent e ) {
 				if (animationThread != null) {	
 					boolean found = false;
-					for(Flower f: plants){
+					for(Plant f: plants){
 						if ( f.contains( e.getPoint()) ) { 
 							found = true;
 							if (currentButton == 1 && f.alive){
-								f.water();
 								outputArea.append("You watered your " + f.getType() + "\n");
-								//System.out.println("You watered your " + f.getType());
+								f.water();
 							}
 						}
 					}
@@ -57,6 +56,13 @@ public class GardenPanel extends JComponent implements Runnable {
 				plants.add(r);
 				outputArea.append("You planted a rose seedling!\n");
 				break;
+			case 2:
+				Cactus c = new Cactus(x, y, outputArea);
+				t = new Thread(c);
+				t.start();
+				plants.add(c);
+				outputArea.append("You planted a cactus seedling!\n");
+				break;
 		}
 		
 	}
@@ -66,7 +72,7 @@ public class GardenPanel extends JComponent implements Runnable {
 	}
 
 	public void paintComponent(Graphics g) {
-		for(Flower f: plants){
+		for(Plant f: plants){
 			if(f.isAlive()){
 				f.draw(g);
 			}
