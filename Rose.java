@@ -6,7 +6,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JTextArea;
 
-public class Rose extends Flower implements Runnable{
+public class Rose extends Plant implements Runnable{
 	private int width;
 	private int height;
 	private JTextArea output;
